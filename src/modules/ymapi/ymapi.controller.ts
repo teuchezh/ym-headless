@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Headers, Param } from '@nestjs/common';
 import { YMApiService } from './ymapi.service';
-import { ApiHeader, ApiOperation } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiParam } from '@nestjs/swagger';
 
 @Controller('ym')
 export class YMApiController {
@@ -23,14 +23,16 @@ export class YMApiController {
     return this.ymService.getLikedTracks();
   }
 
-  @Get()
-  async getHello(): Promise<any> {
-    const lickedTracks = await this.ymService.getLikedTracks();
-
-    console.log(lickedTracks.result[0]);
-    const trackUrl = this.ymService.getTrackUrl(
-      lickedTracks.result[0].id.toString(),
-    );
+  @Get(':id')
+  @ApiOperation({
+    operationId: 'getTrackUrl',
+    summary: 'Get Track Url By ID',
+  })
+  @ApiParam({
+    name: 'id',
+  })
+  async getTrackUrl(@Param() params: any): Promise<any> {
+    const trackUrl = this.ymService.getTrackUrl(params.id);
 
     return trackUrl;
   }

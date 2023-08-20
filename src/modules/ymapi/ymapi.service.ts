@@ -105,8 +105,6 @@ export class YMApiService {
   }
 
   async getLikedTracks() {
-    console.log(this.userId)
-
     const result = await this.client!.tracks.getLikedTracksIds(this.userId!);
     const ids = this.createTrackAlbumIds(result.result.library.tracks);
     const tracks = await this.client.tracks.getTracks({ 'track-ids': ids });
